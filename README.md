@@ -1,2 +1,2 @@
 # BitburnerScripts
-script file for Bitburner
+script files for Bitburner
