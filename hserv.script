@@ -1,0 +1,36 @@
+import { thread_calc } from '/helpers/thread-calc.script';
+
+var scriptlist = ["nwo-hack.js", "nwo-grow.js", "nwo-weaken.js", "early-hack-template.script", "server-rotation.script", "/test/share.js"];
+var jglist = ["jg-hack.js", "jg-weaken.js", "jg-grow.js"];
+var jgsram = new Array();
+var scriptram = new Array();
+for (var i = 0; i < scriptlist.length; i++) {
+	var servram = getScriptRam(scriptlist[i], "home");
+	scriptram.push(servram);
+}
+for (var i = 0; i < jglist.length; i++) {
+	var servram = getScriptRam(jglist[i], "home");
+	jgsram.push(servram);
+}
+var servers_purchased = getPurchasedServers();
+
+for (var j = 0; j < (servers_purchased.length); ++j) {
+	var servname = servers_purchased[j];
+	var servram = getServerMaxRam(servname);
+	scp(scriptlist, "home", servname);
+	scp(jglist, "home", servname);
+	killall(servname);
+	if (j % 12 === 0) {
+		exec(jglist[1], servname, thread_calc(servram, jgsram[1], 70));
+		//exec(scriptlist[2], servname, thread_calc(servram, scriptram[2], 20));
+	} else {
+		//exec(jglist[2], servname, thread_calc(servram, jgsram[2], 70));
+		exec(scriptlist[3], servname, thread_calc(servram, scriptram[3], 70));
+
+	}
+	exec(jglist[2], servname, thread_calc(servram, jgsram[2], 15));
+	exec(scriptlist[5], servname, thread_calc(servram, scriptram[5], 12));
+
+
+	//exec(scriptlist[0], servname, thread_calc(servram, scriptram[0], 40));
+}

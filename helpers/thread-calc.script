@@ -1,0 +1,12 @@
+export function thread_calc(serverMax, scriptRam, ratio) {
+	var threadcount = 0
+	if (serverMax === 8){
+		var threadcount = 1
+	} else if (serverMax === 0 || null) {
+		var threadcount = 0
+	} else {
+		var serverRatio = serverMax*(ratio/100);
+		var threadCount = serverRatio / scriptRam;
+	}
+	return threadCount;
+}

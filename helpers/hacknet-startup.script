@@ -1,0 +1,112 @@
+//WARNING: WILL EAT YOUR CASH FAST!!!
+
+// We will not buy anything if there's less money than this ammount
+reserveMoney = 10000000;
+// Number of times to upgrade (shouldn't have to change this)
+n = 1;
+
+disableLog("getServerMoneyAvailable");
+while (getServerMoneyAvailable("home") < reserveMoney) {
+    sleep(10000);
+}
+// Buy first HacknetNode if there are none
+if (
+    hacknet.numNodes() === 0 &&
+    getServerMoneyAvailable("home") >= reserveMoney
+) {
+    hacknet.purchaseNode();
+    print(
+        "Purchased " +
+        hacknet.getNodeStats((hacknet.numNodes() - 1)).name +
+        " because there was none."
+    );
+}
+while (getServerMoneyAvailable("home") < reserveMoney) {
+    sleep(10000);
+}
+// If there are no Hacknet Nodes, we can't do anything, so the script 
+// ends.
+while (hacknet.numNodes() > 0) {
+    // If there is not enough money, we wait for it instead of ending 
+    // the loop.
+    while (getServerMoneyAvailable("home") >= reserveMoney) {
+        for (i = 0; i < hacknet.numNodes(); i++) {
+            while (
+                hacknet.getLevelUpgradeCost(i, n) < Infinity &&
+                hacknet.upgradeLevel(i, n)
+            ) {
+                print(
+                    "Upgraded " +
+                    hacknet.getNodeStats(i).name +
+                    " to level " +
+                    hacknet.getNodeStats(i).level
+                );
+            }
+            while (
+                hacknet.getRamUpgradeCost(i, n) < Infinity &&
+                hacknet.upgradeRam(i, n)
+            ) {
+                print(
+                    "Upgraded " +
+                    hacknet.getNodeStats(i).name +
+                    " RAM to " +
+                    hacknet.getNodeStats(i).ram
+                );
+            }
+            while (
+                hacknet.getCoreUpgradeCost(i, n) < Infinity &&
+                hacknet.upgradeCore(i, n)
+            ) {
+                print(
+                    "Upgraded " +
+                    hacknet.getNodeStats(i).name +
+                    " core to " +
+                    hacknet.getNodeStats(i).core
+                );
+            }
+        } // END for (i = 0; i < hacknet.numNodes(); i++)
+        // Buy next Hacknet Node if the last one is already fully 
+        // upgraded. If for some reason the last Hacknet Node is fully 
+        // upgraded and the others don't, the loop above will still 
+        // attempt to upgrade them all.
+
+        //stops sucking money early on in the game.
+        while (getServerMoneyAvailable("home") < reserveMoney) {
+            sleep(10000);
+        }
+        if (
+            hacknet.getLevelUpgradeCost(
+                (hacknet.numNodes() - 1), n) === Infinity &&
+            hacknet.getRamUpgradeCost(
+                (hacknet.numNodes() - 1), n) === Infinity &&
+            hacknet.getCoreUpgradeCost(
+                (hacknet.numNodes() - 1), n) === Infinity
+        ) {
+            hacknet.purchaseNode();
+            print(
+                "Purchased " +
+                hacknet.getNodeStats((hacknet.numNodes() - 1)).name +
+                " because the last one couldn't be upgraded further."
+            );
+        } else if (
+            // Or buy the next Hacknet Node if the next upgrade is more 
+            // expensive than buying a new Hacknet Node.
+            hacknet.getLevelUpgradeCost(
+                (hacknet.numNodes() - 1), n) >
+            hacknet.getPurchaseNodeCost() &&
+            hacknet.getRamUpgradeCost(
+                (hacknet.numNodes() - 1), n) >
+            hacknet.getPurchaseNodeCost() &&
+            hacknet.getCoreUpgradeCost(
+                (hacknet.numNodes() - 1), n) >
+            hacknet.getPurchaseNodeCost()
+        ) {
+            hacknet.purchaseNode();
+            print(
+                "Purchased " +
+                hacknet.getNodeStats((hacknet.numNodes() - 1)).name +
+                " because it was cheaper than next upgrade."
+            );
+        }
+    }
+}
