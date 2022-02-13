@@ -1,4 +1,49 @@
 /**
+ * Finds all the prime numbers up to the value given.
+ * Uses something like Sieve of Eratosthenes
+ * @param {NS} ns
+ * @param {number} max
+ * @returns {number[]} List of prime numbers
+ */
+export function getPrimes(ns, max) {
+	const primeNumbers = [];
+
+	for (let i = 2; i < max; i++) {
+		const isPrime = primeNumbers.find(p => i % p === 0) === undefined;
+		if (isPrime) {
+			primeNumbers.push(i);
+		}
+	}
+
+	return primeNumbers;
+}
+
+/**
+ * Finds the largest prime factor of the given number.
+ * @param {NS} ns
+ * @param {number} data
+ */
+export function findLargestPrimeFactor(ns, data) {
+	const largestPossible = Math.floor(Math.sqrt(data));
+	const primeNumbers = getPrimes(ns, largestPossible);
+	const primeFactors = [];
+
+	while (data > 1) {
+		const nextFactor = primeNumbers.find(p => data % p === 0);
+		if (nextFactor !== undefined) {
+			primeFactors.push(nextFactor);
+			data /= nextFactor;
+		} else {
+			// We have hit bedrock
+			primeFactors.push(data);
+			break;
+		}
+	}
+
+	return Math.max(...primeFactors);
+}
+
+/**
  * Given a list of stock prices.
  * Find the most profit that could be made with a single buy/sell.
  * The purchase must occur before the sale.
