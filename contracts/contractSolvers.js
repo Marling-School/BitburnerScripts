@@ -106,7 +106,8 @@ export function mergeOverlap(data) {
 
 const contractSolvers = {
 	'Merge Overlapping Intervals': mergeOverlap,
-	'Algorithmic Stock Trader I': algorithmicStockTrader1
+	'Algorithmic Stock Trader I': algorithmicStockTrader1,
+	'Find Largest Prime Factor': findLargestPrimeFactor
 }
 
 export default contractSolvers;
