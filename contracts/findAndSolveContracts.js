@@ -1,5 +1,5 @@
 import { graphSpider } from '/helpers/graphSpider'
-import contractSolvers from './contractSolvers.js'
+import solvers from '/contracts/solvers/index.js'
 import Graph from '/dataStructures/graph.js';
 
 /** @param {NS} ns **/
@@ -21,7 +21,7 @@ export async function main(ns) {
     contracts.forEach(({ type, host, contract }) => {
         ns.tprint(`Found ${type} in ${contract} on ${host}`);
 
-        const solver = contractSolvers[type];
+        const solver = solvers[type];
         if (!!solver) {
             ns.tprint("Solver Found");
             const data = ns.codingcontract.getData(contract, host);

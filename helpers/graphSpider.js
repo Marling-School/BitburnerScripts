@@ -5,7 +5,7 @@ import Graph from "/dataStructures/graph";
  * @param {NS} ns 
  * @param {string} Host
  * @param {Graph} graph
- * @param {servers} a list of servers
+ * @param {number} maxDepth
  * **/
 export function graphSpider(ns, host, graph, maxDepth = 1) {
     if (maxDepth === 0) return;
