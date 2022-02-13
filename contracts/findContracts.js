@@ -1,5 +1,5 @@
 import { spider } from '../helpers/utilities.js'
-import { mergeOverlap } from './contracts.js'
+import contractSolvers from './contractSolvers.js'
 
 /** @param {NS} ns **/
 export async function main(ns) {
@@ -20,17 +20,17 @@ export async function main(ns) {
     contracts.forEach(({ type, host, contract }) => {
         ns.tprint(`Found ${type} in ${contract} on ${host}`);
 
-        switch (type) {
-            case 'Merge Overlapping Intervals': {
-                const data = ns.codingcontract.getData(contract, host);
+        const solver = contractSolvers[type];
+        if (!!solver) {
+            ns.tprint("Solver Found");
+            const data = ns.codingcontract.getData(contract, host);
+            const answer = solver(data);
 
-                const answer = mergeOverlap(data);
-
-                ns.tprint("Attempting Contract")
-                const result = ns.codingcontract.attempt(answer, contract, host);
-                ns.tprint(`Contract Result ${result}`)
-                break;
-            }
+            ns.tprint("Attempting Contract")
+            const result = ns.codingcontract.attempt(answer, contract, host);
+            ns.tprint(`Contract Result ${result}`)
+        } else {
+            ns.tprint("No solution for contract type");
         }
     })
 }
