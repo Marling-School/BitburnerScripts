@@ -1,14 +1,15 @@
-import { spider } from '../helpers/utilities.js'
+import { graphSpider } from '/helpers/graphSpider'
 import contractSolvers from './contractSolvers.js'
+import Graph from '/dataStructures/graph.js';
 
 /** @param {NS} ns **/
 export async function main(ns) {
-    const hosts = [];
+    const graph = new Graph();
     const contracts = [];
 
-    spider(ns, ns.getHostname(), hosts, 7);
-    for (let i = 0; i < hosts.length; i++) {
-        const host = hosts[i];
+    graphSpider(ns, ns.getHostname(), graph, 7);
+    for (let i = 0; i < graph.visitedNodes.length; i++) {
+        const host = graph.visitedNodes[i];
         const hostContracts = ns.ls(host, '.cct');
         for (let j = 0; j < hostContracts.length; j++) {
             const contract = hostContracts[j];
@@ -25,10 +26,8 @@ export async function main(ns) {
             ns.tprint("Solver Found");
             const data = ns.codingcontract.getData(contract, host);
             const answer = solver(data);
-
-            ns.tprint("Attempting Contract")
             const result = ns.codingcontract.attempt(answer, contract, host);
-            ns.tprint(`Contract Result ${result}`)
+            ns.tprint(`Contract Attempted with Result ${result}`)
         } else {
             ns.tprint("No solution for contract type");
         }
