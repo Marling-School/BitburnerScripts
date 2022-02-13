@@ -25,7 +25,7 @@ export async function main(ns) {
         if (!!solver) {
             ns.tprint("Solver Found");
             const data = ns.codingcontract.getData(contract, host);
-            const answer = solver(data);
+            const answer = solver(ns, data);
             const result = ns.codingcontract.attempt(answer, contract, host);
             ns.tprint(`Contract Attempted with Result ${result}`)
         } else {

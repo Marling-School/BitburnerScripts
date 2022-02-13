@@ -1,3 +1,4 @@
+import { spiralizeMatrix } from "/contracts/solvers/spiraliseMatrix";
 import {
 	algorithmicStockTrader1,
 	algorithmicStockTrader2,
@@ -15,7 +16,8 @@ const contractSolvers = {
 	'Algorithmic Stock Trader III': algorithmicStockTrader3,
 	'Find Largest Prime Factor': findLargestPrimeFactor,
 	'Sanitize Parentheses in Expression': sanitiseParenthesis,
-	'Subarray with Maximum Sum': subArrayWithMaxSum
+	'Subarray with Maximum Sum': subArrayWithMaxSum,
+	'Spiralize Matrix': spiralizeMatrix
 }
 
 export default contractSolvers;
