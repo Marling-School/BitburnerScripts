@@ -52,6 +52,36 @@ Here is an example of what spiral order should be:
  */
 
 export function spiralizeMatrix(ns, data) {
+    const results = [];
 
-    return [];
+    while (data.length > 0) {
+        // Go right across top
+        data[0].forEach(d => results.push(d));
+        data.splice(0, 1);
+
+        // Down right hand side
+        for (let i = 0; i < data.length - 1; i++) {
+            if (data[i].length > 0) {
+                results.push(data[i][data[i].length - 1]);
+                data[i].splice(data[i].length - 1, 1);
+            }
+        }
+
+        // Left across bottom
+        if (data.length > 0) {
+            data[data.length - 1].reverse();
+            data[data.length - 1].forEach(d => results.push(d));
+            data.splice(data.length - 1, 1);
+        }
+
+        // Up the left hand side
+        for (let i = data.length - 1; i > 0; i--) {
+            if (data[i].length > 0) {
+                results.push(data[i][0]);
+                data[i].splice(0, 1);
+            }
+        }
+    }
+
+    return results;
 }
