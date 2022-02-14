@@ -15,10 +15,21 @@ export async function main(ns) {
     const graph = new Graph();
     graphSpider(ns, ns.getHostname(), graph, 7);
 
+    const isValidTarget = host => host !== home &&
+        ns.hasRootAccess(host) &&
+        ns.getServerRequiredHackingLevel(host) < ns.getHackingLevel();
+
     for (let i = 0; i < graph.visitedNodes.length; i++) {
         const host = graph.visitedNodes[i];
-        if (ns.hasRootAccess(host) && ns.getServerRequiredHackingLevel(host) < ns.getHackingLevel()) {
+        if (isValidTarget(host)) {
             await ns.scp(scriptFile, host);
+            const neighbours = graph.getNeighbours(host);
+            for (let j = 0; j < neighbours.length; j++) {
+                const neighbour = neighbours[j];
+                if (isValidTarget(neighbour)) {
+                    ns.exec(scriptFile, host, 1, neighbour);
+                }
+            }
             ns.exec(scriptFile, host, 1, host);
         } else {
             ns.print(`${host} does not have root access`)
