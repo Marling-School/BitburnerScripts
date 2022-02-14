@@ -15,7 +15,7 @@ export async function main(ns) {
     const graph = new Graph();
     graphSpider(ns, ns.getHostname(), graph, 7);
 
-    const isValidTarget = host => host !== home &&
+    const isValidTarget = host => host !== "home" &&
         ns.hasRootAccess(host) &&
         ns.getServerRequiredHackingLevel(host) < ns.getHackingLevel();
 
