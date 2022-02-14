@@ -6,6 +6,7 @@ class Graph {
 
     visitingNode(node) {
         this.visitedNodes.push(node);
+        return this;
     }
 
     nodeVisited(node) {
@@ -15,6 +16,7 @@ class Graph {
     addLink(from, to) {
         this._addLink(from, to);
         this._addLink(to, from);
+        return this;
     }
 
     _addLink(from, to) {

@@ -8,6 +8,8 @@ import Graph from '/dataStructures/graph'
  * @param {NS} ns 
  * **/
 function crackOpen(ns, host) {
+    if (ns.hasRootAccess(host)) return;
+
     ns.print(`Attempting to Crack Open Host ${host}`)
 
     if (ns.getHackingLevel() < ns.getServerRequiredHackingLevel(host)) {
@@ -31,10 +33,9 @@ function crackOpen(ns, host) {
     }
     try {
         ns.nuke(host);
-        ns.tprint(`Gained Root Access to ${host}`)
+        ns.print(`Gained Root Access to ${host}`)
     }
     catch (err) {
-        ns.tprint(`Nuke.exe unsuccessful on ${host}`);
         ns.print("Nuke.exe unsuccessful.");
     }
     /* Delete ln 33 if you {
@@ -50,7 +51,8 @@ function crackOpen(ns, host) {
 
 /** @param {NS} ns **/
 export async function main(ns) {
+    const depth = ns.args.length > 0 ? parseInt(ns.args[0]) : 10;
     const graph = new Graph();
-    graphSpider(ns, ns.getHostname(), graph, 10);
+    graphSpider(ns, ns.getHostname(), graph, depth);
     graph.visitedNodes.forEach(host => crackOpen(ns, host));
 }

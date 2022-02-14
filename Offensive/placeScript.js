@@ -12,8 +12,9 @@ import Graph from '/dataStructures/graph';
 /** @param {NS} ns **/
 export async function main(ns) {
     const scriptFile = ns.args[0];
+    const depth = ns.args.length > 1 ? parseInt(ns.args[1]) : 10;
     const graph = new Graph();
-    graphSpider(ns, ns.getHostname(), graph, 7);
+    graphSpider(ns, ns.getHostname(), graph, depth);
 
     const isValidTarget = host => host !== "home" &&
         ns.hasRootAccess(host) &&
