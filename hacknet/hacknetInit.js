@@ -6,7 +6,7 @@ export async function main(ns) {
 	const n = 1;
 
 	ns.disableLog("getServerMoneyAvailable");
-	ns.exec("./hashControl.js", "home", 1);
+	ns.exec("hashControl.js", "home", 1);
 
 	while (ns.getServerMoneyAvailable("home") < ns.hacknet.getPurchaseNodeCost) {
 		await ns.sleep(10000);
