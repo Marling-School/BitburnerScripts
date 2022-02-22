@@ -1,6 +1,6 @@
 let config = {
   folder: 'scripts',
-  rootUrl: 'https://raw.githubusercontent.com/Deek1337/BitburnerScripts/main/'
+  rootUrl: 'https://raw.githubusercontent.com/Marling-School/BitburnerScripts/main/'
 };
 
 export async function main(ns) {
