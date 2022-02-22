@@ -23,7 +23,6 @@ async function importFiles(ns) {
   ]
   let files = [
     'dashboard.js',
-    'hack.js',
     'serverStatus.js',
     'hacknetBoot.js',
     'scriptPush.js'
