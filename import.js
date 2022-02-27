@@ -1,6 +1,6 @@
 let config = {
   folder: 'scripts',
-  rootUrl: 'https://raw.githubusercontent.com/Marling-School/BitburnerScripts/main/'
+  rootUrl: 'https://raw.githubusercontent.com/Deek1337/BitburnerScripts/main/'
 };
 
 export async function main(ns) {
@@ -23,9 +23,13 @@ async function importFiles(ns) {
   ]
   let files = [
     'dashboard.js',
+    'hack.js',
     'serverStatus.js',
-    'hacknetBoot.js',
-    'scriptPush.js'
+    'bootHacknet.js',
+    'scriptPush.js',
+    'weaken.js',
+    'grow.js',
+    'hack.js'
   ];
 
   let filesImported = true;
