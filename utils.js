@@ -2,13 +2,19 @@
 
 
 export async function main() {
+	ns.tprint("This file contains functions to be imported.")
+	ns.tprint("Imports are:")
+	ns.tprint("ScriptTarget: selects which server to target based on root access.")
+	ns.tprint("spider: Gets list of servers as a raw output. Does not assess if they have root acces.")
+	ns.tprint("threadCalc: calculates threads to give scripts. Accepts [serverMax, scriptRam, ratio].")
+	ns.tprint("getRamCost: Finds RAM cost of a script")
+	ns.tprint("bitNodeCheck: Checks if user has the bitNode achievement to access certain elements of scripts. NOTE: High RAM usage.")
+	ns.tprint("nameGen: Generates a random Name. Used for new gang members.")
 }
 
 export function scriptTarget(ns) {
-	const nwoLvl = ns.getServerRequiredHackingLevel('nwo');
-	const joesgunsLvl = ns.getServerRequiredHackingLevel('joesguns')
-	return (ns.getHackingLevel() > nwoLvl ? "nwo" : (
-		ns.getHackingLevel() > joesgunsLvl ? 'joesguns' : 'n00dles')
+	return (ns.hasRootAccess ("nwo") ? "nwo" : (
+		ns.hasRootAccess('joesguns') ? 'joesguns' : 'n00dles')
 	)
 }
 
@@ -27,24 +33,7 @@ export function spider(ns) {
 			}
 		}
 	}
-	return (ns, serversSeen);
-}
-
-export async function hacknetServerConfig(ns) {
-	const serverList = spider(ns).filter((server) => server.includes("hacknet"));
-    const target = scriptTarget(ns);	
-	const scriptList = [`${target}-grow.js`, `${target}-weaken.js`];
-
-	for (let server in serverList) {
-		ns.killall(serverList[server]);
-			for (let script in scriptList) {
-				let scriptRam = ns.getScriptRam(scriptList[j]);
-				await ns.scp(scriptList, serverList[script]);
-				ns.exec(scriptList[script], serverList[server], threadCalc(ns, ns.getServerMaxRam(serverList[server]), scriptRam, ratioGen(ns, scriptList.length)));
-			}
-	}
-		
-	
+	return (serversSeen);
 }
 
 export function threadCalc(serverMax, scriptRam, ratio) {
@@ -68,76 +57,6 @@ export function getRamCost(ns, scriptArr) {
 
 export function ratioGen(scriptLength) {
 	return Math.floor(100 / scriptLength);
-}
-
-export async function reconfigPurchasedServers(ns) {
-	const target = scriptTarget(ns);
-	const serversPurchased = ns.getPurchasedServers();
-	//Depending on target, set scriptlist to push to purchased servers.
-	const scriptList = [`${target}-grow.js`, `${target}-weaken.js`];
-	let scriptRam = getRamCost(ns,scriptList);
-
-	for (let j = 0; j < (serversPurchased.length); ++j) {
-		let servName = serversPurchased[j];
-		let servRam = ns.getServerMaxRam(servName);
-		ns.killall(servName);
-
-		await ns.scp(scriptList, "home", servName);
-		if (j % 10 === 0) {
-			ns.exec(scriptList[1], servName, threadCalc(servRam, scriptRam[1], 80),ns,target);
-			ns.exec(scriptList[0], servName, threadCalc(servRam, scriptRam[0], 20),ns,target);
-		} else {
-			ns.exec(scriptList[0], servName, threadCalc(servRam, scriptRam[0], 80),ns,target);
-			ns.exec(scriptList[1], servName, threadCalc(servRam, scriptRam[1], 20),ns,target);
-		}
-	}
-	ns.toast("Home server reconfiguration: Complete","success",2000)
-}
-
-export function hashControl(ns) {
-    const target = "nwo"
-    if (ns.getHackingLevel() < ns.getServerRequiredHackingLevel(target)) {
-        ns.hacknet.spendHashes("Sell for Money")
-    } else {
-        if (ns.hacknet.hashCost("Reduce Minimum Security") < ns.hacknet.numHashes() && ns.getServerMinSecurityLevel(target) > 20) {
-            ns.hacknet.spendHashes("Reduce Minimum Security", target);
-            }
-        if (ns.hacknet.hashCost("Increase Maximum Money") < ns.hacknet.numHashes()) {
-            ns.hacknet.spendHashes("Increase Maximum Money", target);
-        } else {
-            ns.hacknet.spendHashes("Sell for Money")
-        }
-        
-    }
-}
-
-export async function purchasedServersConfig(ns) {
-	const target = scriptTarget(ns)
-	//Depending on target, set scriptlist to push to purchased servers.
-	const scriptList = [`${target}-grow.js`, `${target}-weaken.js`];
-	let scriptRam = new Array();
-	//Get ram usage of each script in our scriptlist. Used later to get thread amount.
-	for (let i = 0; i < scriptList.length; i++) {
-		let servRam = ns.getScriptRam(scriptList[i], "home");
-		scriptRam.push(servRam);
-	}
-	const serversPurchased = ns.getPurchasedServers();
-
-	for (let j = 0; j < (serversPurchased.length); ++j) {
-		let servName = serversPurchased[j];
-		let servRam = ns.getServerMaxRam(servName);
-		ns.killall(servName);
-
-		await ns.scp(scriptList, "home", servName);
-		if (j % 10 === 0) {
-			ns.exec(scriptList[1], servName, threadCalc(ns, servRam, scriptRam[1], 80));
-			ns.exec(scriptList[0], servName, threadCalc(ns, servRam, scriptRam[0], 20));
-		} else {
-			ns.exec(scriptList[0], servName, threadCalc(ns, servRam, scriptRam[0], 80));
-			ns.exec(scriptList[1], servName, threadCalc(ns, servRam, scriptRam[1], 20));
-		}
-	}
-	ns.toast("Home server reconfiguration: Complete","success",2000)
 }
 
 export function bitNodeCheck(ns, node) {

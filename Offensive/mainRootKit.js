@@ -38,15 +38,6 @@ function crackOpen(ns, host) {
     catch (err) {
         ns.print("Nuke.exe unsuccessful.");
     }
-    /* Delete ln 33 if you {
-        a: You do not have Source-File 4
-        2: You do not have a minimum on 1TB ram.
-        */
-    // const ramLeft = ns.getServerMaxRam() - ns.getServerUsedRam();
-    // if (ramLeft > 1000000000000) {
-    // 	ns.print("Enough RAM to install backdoor")
-    // 	//await ns.installBackdoor(host);
-    // }
 }
 
 /** @param {NS} ns **/
